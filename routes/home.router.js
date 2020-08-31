@@ -93,7 +93,10 @@ router.put('/usereditsave', (req, res) => {
         name,
         password
     }
-    Users.updateOne({ email: email }, data, (err, docs) => {
+    
+    Users.updateOne({ id: id }, data, (err, docs) => {
+        
+        
         if (err) throw err;
         res.redirect("/admindashboard");
     })
