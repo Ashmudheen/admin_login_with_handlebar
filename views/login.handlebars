@@ -1,4 +1,4 @@
-<div class="col-12 col-md-6 mx-auto bg-light p-4 mt-5">
+<div class="col-12 col-md-6 mx-auto bg-light p-4 mt-5" style="background-image:linear-gradient(#303030,#303030,#303030);">
     <form method="POST" action="/login">
         <h4>User Login</h4>
         {{#if msg}}
@@ -10,8 +10,8 @@
         </div>
         {{/if}}
         <div class="form-group">
-            <label for="email">Email address</label>
-            <input type="email" name="email" class="form-control" id="email" required>
+            <label for="email">Username</label>
+            <input type="text" name="name" class="form-control" id="email" required>
         </div>
         <div class="form-group">
             <label for="password">Password</label>

@@ -9,8 +9,8 @@ var userSchema = new mongoose.Schema({
 });
 var user = mongoose.model('myuser', userSchema);
 var admin = {
-    email: 'admin@gmail.com',
-    password: 'password'
+    email: 'admin',
+    password: 'admin'
 }
 exports.User = user;
 exports.admin = admin;

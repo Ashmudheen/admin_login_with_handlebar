@@ -56,7 +56,7 @@ router.get('/register', ridirecttoDashboard, (req, res) => {
 });
 
 router.get('/admin', ridirecttoadminDashboard,(req, res) => {
-    res.render('adminlogin',{title :'Admin login'});
+    res.render('adminlogin',{title :'Admin login' });
 })
 router.get('/admindashboard', protectadmin, (req, res) => {
     Users.find({}).lean()
@@ -69,11 +69,11 @@ router.get('/admindashboard', protectadmin, (req, res) => {
 
 router.post('/admin', (req, res) => {
     const { email, password } = admin;
-    if(req.body.email == email && req.body.password == password){
-        req.session.emailid = req.body.email;
+    if(req.body.name == email && req.body.password == password){
+        req.session.emailid = req.body.name;
         res.redirect('/admindashboard');
     }else{
-        const msg = 'Invalid Password';
+        const msg = 'Invalid username or Password';
         res.render('adminlogin', { msg });
     }
 })
@@ -130,12 +130,12 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-    const email = req.body.email;
+    const name = req.body.name;
     const password = req.body.password;
 
-    Users.findOne({ email: email, password: password }, (err, user) => {
+    Users.findOne({ name: name, password: password }, (err, user) => {
         if (!user) {
-            const msg = 'Invalid Password';
+            const msg = 'Invalid Username or Password';
             res.render('login', { msg });
         } else {
             req.session.userid = user.name;
