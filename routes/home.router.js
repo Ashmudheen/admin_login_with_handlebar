@@ -5,6 +5,7 @@ const session = require('express-session');
 const router = express.Router();
 
 
+
 const ridirecttoDashboard = (req, res, next) => {
     if (req.session.userid) {
         res.redirect('/dashboard');
@@ -21,21 +22,7 @@ const protectHome = (req, res, next) => {
     }
 }
 
-const protectadmin = (req,res,next) =>{
-    if(!req.session.emailid){
-        res.redirect('/admin');
-    }else{
-        next();
-    }
-}
 
-const ridirecttoadminDashboard = (req, res, next) => {
-    if (req.session.emailid) {
-        res.redirect('/admindashboard');
-    } else {
-        next();
-    }
-}
 
 
 router.get('/', ridirecttoDashboard, (req, res) => {
@@ -55,66 +42,9 @@ router.get('/register', ridirecttoDashboard, (req, res) => {
     res.render('register',{title :'Register User'});
 });
 
-router.get('/admin', ridirecttoadminDashboard,(req, res) => {
-    res.render('adminlogin',{title :'Admin login' });
-})
-router.get('/admindashboard', protectadmin, (req, res) => {
-    Users.find({}).lean()
-        .exec((err, data) => {
-            res.render('admindashboard', { users: data ,title :'Admin Page'});
-        })
-})
 
 //post methods
 
-router.post('/admin', (req, res) => {
-    const { email, password } = admin;
-    if(req.body.name == email && req.body.password == password){
-        req.session.emailid = req.body.name;
-        res.redirect('/admindashboard');
-    }else{
-        const msg = 'Invalid username or Password';
-        res.render('adminlogin', { msg });
-    }
-})
-router.post('/useredit', (req, res) => {
-    const email = req.body.email;
-    Users.findOne({ email: email }).lean()
-        .exec((err, data) => {
-            res.render('adminedit', { user: data });
-        })
-})
-
-router.put('/usereditsave', (req, res) => {
-    const { id, email, name, password } = req.body;
-    const data = {
-        id,
-        email,
-        name,
-        password
-    }
-    
-    Users.updateOne({ id: id }, data, (err, docs) => {
-        
-        
-        if (err) throw err;
-        res.redirect("/admindashboard");
-    })
-})
-
-router.delete('/deleteuser', (req, res) => {
-    const email = req.body.email;
-    Users.deleteOne({ email: email }, (err) => {
-        if (err) throw err;
-        res.redirect("/admindashboard");
-    })
-})
-
-router.post('/adminlogout', (req, res) => {
-    req.session.destroy();
-    res.clearCookie("sid");
-    res.redirect("/login");
-})
 
 router.post('/register', (req, res) => {
     const newUser = {
@@ -136,7 +66,7 @@ router.post('/login', (req, res) => {
     Users.findOne({ name: name, password: password }, (err, user) => {
         if (!user) {
             const msg = 'Invalid Username or Password';
-            res.render('login', { msg });
+            res.render('login', { msg,name:name,password:password });
         } else {
             req.session.userid = user.name;
             res.redirect('/dashboard');
